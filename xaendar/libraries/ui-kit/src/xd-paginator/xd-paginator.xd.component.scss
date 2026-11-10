@@ -1,0 +1,91 @@
+@use '../theme/tokens' as t;
+
+:host {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  border-radius: t.get('border-radius');
+  background: t.get('surface-background');
+  color: t.get('text-color');
+  font-family: t.get('font-family');
+}
+
+:host(.collapsed) {
+  display: none;
+}
+
+.content-start,
+.content-end {
+  display: none;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+
+  &.filled {
+    display: flex;
+  }
+}
+
+.content-start {
+  margin-inline-end: auto;
+}
+
+.content-end {
+  margin-inline-start: auto;
+}
+
+.current {
+  color: t.get('text-muted-color');
+}
+
+.pages {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.page {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2.5rem;
+  height: 2.5rem;
+  margin: 0;
+  padding: 0;
+  border: 0 none;
+  border-radius: 50%;
+  background: transparent;
+  color: t.get('text-muted-color');
+  font: inherit;
+  line-height: 1;
+  cursor: pointer;
+  user-select: none;
+  transition-duration: t.get('transition-duration');
+  transition-property: background, color, outline-color, box-shadow;
+
+  &:hover:not(.selected) {
+    background: t.get('surface-hover');
+    color: t.get('text-hover-color');
+  }
+
+  &:focus-visible {
+    @include t.focus-ring;
+  }
+
+  &.selected {
+    background: t.get('highlight-background');
+    color: t.get('highlight-color');
+  }
+}
+
+.jump-to-page-input {
+  max-width: 5rem;
+}
+
+:host(:dir(rtl)) xd-button {
+  transform: rotate(180deg);
+}

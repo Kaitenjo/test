@@ -1,0 +1,256 @@
+@import { XdGridColumnReorderDirective } from '../directives/xd-grid-column-reorder.directive.ts'
+@import { XdGridColumnResizerDirective } from '../directives/xd-grid-column-resizer.directive.ts'
+@import { XdGridSelectableRowDirective } from '../directives/xd-grid-selectable-row.directive.ts'
+@import { XdGridSortableColumnDirective } from '../directives/xd-grid-sortable-column.directive.ts'
+@import { XdGridRow } from '../types/xd-grid.types.ts'
+@import { XdCheckboxComponent } from '../xd-checkbox/xd-checkbox.xd.component.ts'
+@import { XdIconComponent } from '../xd-icon/xd-icon.xd.component.ts'
+@import { XdInputNumberComponent } from '../xd-input-number/xd-input-number.xd.component.ts'
+@import { XdPaginatorComponent } from '../xd-paginator/xd-paginator.xd.component.ts'
+@import { XdRadioButtonComponent } from '../xd-radio-button/xd-radio-button.xd.component.ts'
+@import { XdScrollerComponent } from '../xd-scroller/xd-scroller.xd.component.ts'
+
+<div class="{rootClass()}">
+  @if (loading() && showLoader()) {
+    <div class="xd-grid-mask">
+      <xd-icon class="xd-grid-loading-icon" name="spinner" spin="{true}" />
+    </div>
+  }
+  <div class="xd-grid-header" part="header" [class.xd-grid-hidden]="{!hasCaption()}">
+    <slot name="caption" />
+  </div>
+  @if (paginatorTop()) {
+    @render paginatorView('top')
+  }
+  <div #wrapper class="xd-grid-table-container" style="{containerStyle()}">
+    @if (virtualScroll()) {
+      <xd-scroller
+        #scroller
+        itemCount="{totalCount()}"
+        itemSize="{virtualScrollItemSize()}"
+        viewportHeight="{viewportHeight() === 'flex' ? '100%' : (viewportHeight() ?? '400px')}"
+        delay="{lazy() ? virtualScrollDelay() : 0}"
+        lazy="{lazy()}"
+        step="{currentRows()}"
+        (rangeChange)="onRangeChange($event)"
+        (lazyLoad)="onVirtualLazyLoad($event)"
+      >
+        @render gridTable(renderedRows())
+      </xd-scroller>
+    } @else {
+      @render gridTable(renderedRows())
+    }
+  </div>
+  @if (paginatorBottom()) {
+    @render paginatorView('bottom')
+  }
+  <div class="xd-grid-footer" part="footer" [class.xd-grid-hidden]="{!hasSummary()}">
+    <slot name="summary" />
+  </div>
+  @if (resizableColumns()) {
+    <div class="xd-grid-resize-indicator" style="{resizeIndicatorStyle()}" />
+  }
+</div>
+
+<template paginatorView(position: string)>
+  <xd-paginator
+    class="{`xd-grid-paginator xd-grid-paginator-${position()}`}"
+    part="paginator"
+    rows="{currentRows()}"
+    first="{currentFirst()}"
+    totalRecords="{totalCount()}"
+    pageLinkSize="{pageLinks()}"
+    alwaysShow="{alwaysShowPaginator()}"
+    rowsPerPageOptions="{rowsPerPageOptions()}"
+    currentPageReportTemplate="{currentPageReportTemplate()}"
+    showFirstLastIcon="{showFirstLastIcon()}"
+    showCurrentPageReport="{showCurrentPageReport()}"
+    showJumpToPageDropdown="{showJumpToPageDropdown()}"
+    showJumpToPageInput="{showJumpToPageInput()}"
+    showPageLinks="{showPageLinks()}"
+    locale="{paginatorLocale()}"
+    (pageChange)="onPageChange($event)"
+  >
+    <slot name="paginator-left" slot="left" />
+    <slot name="paginator-right" slot="right" />
+  </xd-paginator>
+</template>
+
+<template gridTable(tableRows: XdGridRow[])>
+  <table class="{`xd-grid-table ${tableStyleClass()}`}" part="table" role="grid" style="{tableStyle()}">
+    <colgroup>
+      @for (column of displayColumns(); track column().key) {
+        <col style="{columnStyle(column())}" />
+      }
+    </colgroup>
+    <thead class="xd-grid-thead">
+      <tr>
+        @for (column of displayColumns(); track column().key; columnIndex = $index) {
+          <th
+            @if (isSortable(column())) {
+              @@xdGridSortableColumn(field="{column().field}" (columnSort)="onSort($event)")
+            }
+            @if (isReorderable(column())) {
+              @@xdGridColumnReorder(index="{columnIndex()}" (columnDrop)="onColumnDrop($event)")
+            }
+            @if (isSortable(column())) {
+              aria-sort="{sortAriaValue(column())}"
+            }
+            scope="col"
+            class="{headerClass(column())}"
+          >
+            <div class="xd-grid-column-header-content">
+              @if (isDataColumn(column())) {
+                <span class="xd-grid-column-title">
+                  <slot name="{`header-${column().field}`}">{ headerText(column()) }</slot>
+                </span>
+                @if (isSortable(column())) {
+                  <xd-icon class="xd-grid-sort-icon" name="{sortIcon(column())}" />
+                  @if (sortBadge(column())) {
+                    <span class="xd-grid-sort-badge">{ sortBadge(column()) }</span>
+                  }
+                }
+              }
+              @if (column().type === 'checkbox' && isMultiple()) {
+                <xd-checkbox
+                  ariaLabel="Select all rows"
+                  checked="{headerChecked()}"
+                  indeterminate="{headerIndeterminate()}"
+                  (checkedChange)="onHeaderCheckboxChange($event.detail, $event)"
+                />
+              }
+            </div>
+            @if (isResizable(column())) {
+              <span
+                @@xdGridColumnResizer(
+                  (resizeBegin)="onResizeBegin($event)"
+                  (resizing)="onResizing($event)"
+                  (resizeEnd)="onResizeEnd($event, columnIndex())"
+                )
+                class="xd-grid-column-resizer"
+              />
+            }
+          </th>
+        }
+      </tr>
+      @if (hasColumnFilters()) {
+        <tr class="xd-grid-filter-row">
+          @for (column of displayColumns(); track column().key) {
+            <th class="xd-grid-filter-cell">
+              @if (column().filter) {
+                @switch (column().filterType) {
+                  @case ('numeric') {
+                    <xd-input-number
+                      ariaLabel="{filterPlaceholder(column())}"
+                      value="{filterValue(column()) as number | null}"
+                      (valueChange)="onFilterValue(column(), $event.detail)"
+                    />
+                  }
+                  @case ('boolean') {
+                    <xd-checkbox
+                      ariaLabel="{filterPlaceholder(column())}"
+                      checked="{filterValue(column()) === true}"
+                      indeterminate="{filterValue(column()) === null}"
+                      (checkedChange)="onFilterBoolean(column())"
+                    />
+                  }
+                  @default {
+                    <input
+                      class="xd-grid-filter-input"
+                      type="text"
+                      aria-label="{filterPlaceholder(column())}"
+                      data-field="{column().field}"
+                      placeholder="{filterPlaceholder(column())}"
+                      value="{filterText(column())}"
+                      (input)="onFilterInput(column(), $event.target as HTMLInputElement)"
+                    />
+                  }
+                }
+              }
+            </th>
+          }
+        </tr>
+      }
+    </thead>
+    <tbody class="xd-grid-tbody">
+      @for (row of tableRows(); track row().key; rowIndex = $index) {
+        <tr
+          @if (isSelectable()) {
+            @@xdGridSelectableRow(
+              index="{rowIndex() + rowOffset()}"
+              disabled="{!isRowSelectable(row())}"
+              (rowClick)="onRowClick(row(), $event)"
+            )
+          }
+          @if (isSelectable()) {
+            aria-selected="{isSelected(row().data)}"
+          }
+          class="{rowClass(row(), rowIndex())}"
+          style="{rowStyle()}"
+        >
+          @for (column of displayColumns(); track column().key) {
+            <td class="{cellClass(column())}">
+              @switch (column().type) {
+                @case ('checkbox') {
+                  <xd-checkbox
+                    ariaLabel="Select row"
+                    checked="{isSelected(row().data)}"
+                    disabled="{!isRowSelectable(row())}"
+                    (checkedChange)="onRowCheckbox(row(), rowIndex(), $event)"
+                  />
+                }
+                @case ('radio') {
+                  <xd-radio-button
+                    ariaLabel="Select row"
+                    checked="{isSelected(row().data)}"
+                    disabled="{!isRowSelectable(row())}"
+                    (checkedChange)="onRowRadio(row(), rowIndex(), $event)"
+                  />
+                }
+                @case ('expander') {
+                  <button
+                    type="button"
+                    class="xd-grid-row-toggle"
+                    aria-expanded="{isExpanded(row().data) ? 'true' : 'false'}"
+                    aria-label="Toggle row"
+                    (click)="toggleRow(row().data, $event)"
+                  >
+                    <xd-icon name="{expanderIcon(row().data)}" />
+                  </button>
+                }
+                @default {
+                  <slot name="{cellSlot(row(), column())}">{ cellText(row(), column()) }</slot>
+                }
+              }
+            </td>
+          }
+        </tr>
+        @if (isExpanded(row().data)) {
+          <tr class="xd-grid-expansion-row">
+            <td class="xd-grid-expansion-cell" colspan="{displayColumns().length}">
+              <slot name="{`expansion-${row().key}`}" />
+            </td>
+          </tr>
+        }
+      }
+      @if (tableRows().length === 0) {
+        <tr class="xd-grid-empty-row">
+          <td class="xd-grid-empty-cell" colspan="{displayColumns().length}">
+            <slot name="empty">{ emptyMessage() }</slot>
+          </td>
+        </tr>
+      }
+    </tbody>
+    @if (hasFooter()) {
+      <tfoot class="xd-grid-tfoot">
+        <tr>
+          @for (column of displayColumns(); track column().key) {
+            <td class="{cellClass(column())}">
+              <slot name="{`footer-${column().field}`}">{ footerText(column()) }</slot>
+            </td>
+          }
+        </tr>
+      </tfoot>
+    }
+  </table>
+</template>

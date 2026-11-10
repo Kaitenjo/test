@@ -1,0 +1,39 @@
+{
+  "name": "xaendar-grid-app",
+  "version": "0.0.0",
+  "scripts": {
+    "ng": "ng",
+    "build:xaendar": "npm --prefix xaendar run build",
+    "test:xaendar": "npm --prefix xaendar test",
+    "prestart": "npm run build:xaendar",
+    "start": "ng serve",
+    "build": "ng build",
+    "prebuild": "npm run build:xaendar",
+    "watch": "ng build --watch --configuration development",
+    "test": "ng test"
+  },
+  "private": true,
+  "packageManager": "npm@12.0.2",
+  "dependencies": {
+    "@angular/common": "^21.2.0",
+    "@angular/compiler": "^21.2.0",
+    "@angular/core": "^21.2.0",
+    "@angular/forms": "^21.2.0",
+    "@angular/platform-browser": "^21.2.0",
+    "@angular/router": "^21.2.0",
+    "@xaendar/core": "^1.2.2",
+    "@xaendar/signals": "^1.2.2",
+    "@xaendar/ui-kit": "file:xaendar/dist/ui-kit",
+    "rxjs": "~7.8.0",
+    "tslib": "^2.3.0"
+  },
+  "devDependencies": {
+    "@angular/build": "^21.2.24",
+    "@angular/cli": "^21.2.24",
+    "@angular/compiler-cli": "^21.2.0",
+    "jsdom": "^28.0.0",
+    "prettier": "^3.8.1",
+    "typescript": "~5.9.2",
+    "vitest": "^4.0.8"
+  }
+}

@@ -1,0 +1,58 @@
+@import { XdIconComponent } from '../xd-icon/xd-icon.xd.component.ts'
+
+<div class="root" [class.with-buttons]="{showButtons()}">
+  <input
+    #field
+    @if (disabled()) {
+      disabled
+    }
+    @if (accessibleLabel()) {
+      aria-label="{accessibleLabel()}"
+    }
+    @if (value() !== null) {
+      aria-valuenow="{value()}"
+    }
+    @if (min() !== null) {
+      aria-valuemin="{min()}"
+    }
+    @if (max() !== null) {
+      aria-valuemax="{max()}"
+    }
+    type="text"
+    role="spinbutton"
+    inputmode="decimal"
+    autocomplete="off"
+    class="input"
+    placeholder="{placeholder()}"
+    (change)="commit(field.value)"
+    (keydown)="onKeydown($event)"
+  />
+  @if (showButtons()) {
+    <div class="buttons">
+      <button
+        @if (disabled()) {
+          disabled
+        }
+        type="button"
+        tabindex="-1"
+        aria-label="Increment"
+        class="button"
+        (click)="adjust(1)"
+      >
+        <xd-icon name="angle-up" />
+      </button>
+      <button
+        @if (disabled()) {
+          disabled
+        }
+        type="button"
+        tabindex="-1"
+        aria-label="Decrement"
+        class="button"
+        (click)="adjust(-1)"
+      >
+        <xd-icon name="angle-down" />
+      </button>
+    </div>
+  }
+</div>

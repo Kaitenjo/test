@@ -1,0 +1,65 @@
+@import { XdButtonComponent } from '../xd-button/xd-button.xd.component.ts'
+@import { XdInputNumberComponent } from '../xd-input-number/xd-input-number.xd.component.ts'
+@import { XdSelectComponent } from '../xd-select/xd-select.xd.component.ts'
+
+<div class="content-start" [class.filled]="{hasLeft()}">
+  <slot #leftSlot name="left" (slotchange)="onSlotChange()" />
+</div>
+
+@if (showCurrentPageReport()) {
+  <span class="current">{ currentPageReport() }</span>
+}
+
+@if (showFirstLastIcon()) {
+  <xd-button icon="angle-double-left" ariaLabel="{labels.first}" disabled="{isFirstPage() || isEmpty()}" text="{true}"
+    rounded="{true}" (click)="changePageToFirst($event)" />
+}
+
+<xd-button icon="angle-left" ariaLabel="{labels.previous}" disabled="{isFirstPage() || isEmpty()}" text="{true}"
+  rounded="{true}" (click)="changePageToPrev($event)" />
+
+@if (showPageLinks()) {
+  <span class="pages">
+    @for (pageLink of pageLinks(); track pageLink()) {
+      <button
+        @if (pageLink() - 1 === page()) {
+          aria-current="page"
+        }
+        type="button"
+        class="page"
+        aria-label="{pageLabel(pageLink())}"
+        [class.selected]="{pageLink() - 1 === page()}"
+        (click)="changePage(pageLink() - 1)"
+      >
+        { localize(pageLink()) }
+      </button>
+    }
+  </span>
+}
+
+@if (showJumpToPageDropdown()) {
+  <xd-select options="{pageItems()!}" optionLabel="label" optionValue="value" value="{page()}" disabled="{isEmpty()}"
+    ariaLabel="{labels.jumpToPageDropdown}" class="jump-to-page-dropdown" (valueChange)="changePage($event.detail)" />
+}
+
+<xd-button icon="angle-right" ariaLabel="{labels.next}" disabled="{isLastPage() || isEmpty()}" text="{true}"
+  rounded="{true}" (click)="changePageToNext($event)" />
+
+@if (showFirstLastIcon()) {
+  <xd-button icon="angle-double-right" ariaLabel="{labels.last}" disabled="{isLastPage() || isEmpty()}" text="{true}"
+    rounded="{true}" (click)="changePageToLast($event)" />
+}
+
+@if (showJumpToPageInput()) {
+  <xd-input-number value="{currentPage()}" min="{1}" max="{pageCount()}" disabled="{isEmpty()}"
+    ariaLabel="{labels.jumpToPageInput}" class="jump-to-page-input" (valueChange)="onPageInputChange($event.detail)" />
+}
+
+@if (rowsPerPageItems()) {
+  <xd-select options="{rowsPerPageItems()!}" optionLabel="label" optionValue="value" value="{currentRows()}"
+    disabled="{isEmpty()}" ariaLabel="{labels.rowsPerPage}" class="rows-per-page-dropdown"
+    (valueChange)="onRowsChange($event.detail)" />
+}
+<div class="content-end" [class.filled]="{hasRight()}">
+  <slot #rightSlot name="right" (slotchange)="onSlotChange()" />
+</div>

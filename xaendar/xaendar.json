@@ -1,0 +1,13 @@
+{
+  "name": "components",
+  "generate": {
+    "components": {
+      "style": "scss"
+    }
+  },
+  "libs": {
+    "components": {
+      "root": "libraries/ui-kit"
+    }
+  }
+}

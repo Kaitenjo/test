@@ -1,0 +1,97 @@
+@use '../theme/tokens' as t;
+
+:host {
+  display: inline-flex;
+}
+
+.root {
+  position: relative;
+  display: inline-flex;
+  flex: 1 1 auto;
+}
+
+.input {
+  flex: 1 1 auto;
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  padding: t.get('input-padding');
+  border: 1px solid t.get('input-border-color');
+  border-radius: t.get('border-radius');
+  background: t.get('input-background');
+  color: t.get('text-color');
+  font-family: t.get('font-family');
+  font-size: t.get('font-size');
+  appearance: none;
+  outline-color: transparent;
+  transition:
+    background t.get('transition-duration'),
+    color t.get('transition-duration'),
+    border-color t.get('transition-duration'),
+    outline-color t.get('transition-duration');
+}
+
+.input:enabled:hover {
+  border-color: t.get('primary-color');
+}
+
+.input:enabled:focus {
+  border-color: t.get('primary-color');
+  @include t.focus-ring;
+}
+
+.input:disabled {
+  opacity: t.get('disabled-opacity');
+  cursor: default;
+}
+
+.input::placeholder {
+  color: t.get('text-muted-color');
+}
+
+.with-buttons .input {
+  padding-inline-end: calc(2rem + 0.75rem);
+}
+
+.buttons {
+  position: absolute;
+  inset-block: 1px;
+  inset-inline-end: 1px;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.button {
+  display: flex;
+  flex: 1 1 auto;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  padding: 0;
+  border: 0 none;
+  background: t.get('surface-hover');
+  color: t.get('text-muted-color');
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition:
+    background t.get('transition-duration'),
+    color t.get('transition-duration');
+}
+
+.button:first-child {
+  border-start-end-radius: calc(#{t.get('border-radius')} - 1px);
+}
+
+.button:last-child {
+  border-end-end-radius: calc(#{t.get('border-radius')} - 1px);
+}
+
+.button:not(:disabled):hover {
+  background: t.get('surface-border');
+  color: t.get('text-hover-color');
+}
+
+.button:disabled {
+  cursor: default;
+}

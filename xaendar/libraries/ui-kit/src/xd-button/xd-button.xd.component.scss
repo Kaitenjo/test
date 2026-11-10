@@ -1,0 +1,103 @@
+@use '../theme/tokens' as t;
+
+:host {
+  display: inline-flex;
+}
+
+:host(.disabled) {
+  pointer-events: none;
+}
+
+.button {
+  --xd-button-color: #{t.get('primary-color')};
+  --xd-button-hover-color: #{t.get('primary-hover-color')};
+  --xd-button-contrast: #{t.get('primary-contrast-color')};
+
+  position: relative;
+  display: inline-flex;
+  flex: 1 1 auto;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  overflow: hidden;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--xd-button-color);
+  border-radius: t.get('border-radius');
+  background: var(--xd-button-color);
+  color: var(--xd-button-contrast);
+  font-family: t.get('font-family');
+  font-size: t.get('font-size');
+  font-weight: 500;
+  cursor: pointer;
+  user-select: none;
+  outline-color: transparent;
+  transition:
+    background t.get('transition-duration'),
+    color t.get('transition-duration'),
+    border-color t.get('transition-duration'),
+    outline-color t.get('transition-duration');
+}
+
+.button:not(:disabled):hover {
+  border-color: var(--xd-button-hover-color);
+  background: var(--xd-button-hover-color);
+}
+
+.button:focus-visible {
+  @include t.focus-ring;
+}
+
+.button:disabled {
+  cursor: default;
+  opacity: t.get('disabled-opacity');
+}
+
+.button.secondary {
+  --xd-button-color: #{t.get('surface-hover')};
+  --xd-button-hover-color: #{t.get('surface-border')};
+  --xd-button-contrast: #{t.get('text-color')};
+}
+
+.button.danger {
+  --xd-button-color: #{t.get('danger-color')};
+  --xd-button-hover-color: #{t.get('danger-color')};
+  --xd-button-contrast: #ffffff;
+}
+
+.button.danger:not(:disabled):hover {
+  filter: brightness(0.9);
+}
+
+.button.text {
+  border-color: transparent;
+  background: transparent;
+  color: var(--xd-button-color);
+}
+
+.button.text:not(:disabled):hover {
+  border-color: transparent;
+  background: t.get('surface-hover');
+  color: var(--xd-button-color);
+}
+
+.button.text.secondary {
+  --xd-button-color: #{t.get('text-muted-color')};
+}
+
+.button.rounded {
+  border-radius: 2rem;
+}
+
+.button.icon-only {
+  width: 2.5rem;
+  padding-inline: 0;
+}
+
+.button.icon-only.rounded {
+  height: 2.5rem;
+  border-radius: 50%;
+}
+
+.icon.right {
+  order: 1;
+}

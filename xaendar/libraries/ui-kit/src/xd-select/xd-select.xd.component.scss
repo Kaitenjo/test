@@ -1,0 +1,146 @@
+@use '../theme/tokens' as t;
+
+:host {
+  display: inline-flex;
+  font-family: t.get('font-family');
+  font-size: t.get('font-size');
+  color: t.get('text-color');
+}
+
+.trigger {
+  display: inline-flex;
+  flex: 1 1 auto;
+  align-items: center;
+  box-sizing: border-box;
+  min-width: 0;
+  cursor: pointer;
+  user-select: none;
+  background: t.get('input-background');
+  border: 1px solid t.get('input-border-color');
+  border-radius: t.get('border-radius');
+  transition:
+    border-color t.get('transition-duration'),
+    box-shadow t.get('transition-duration');
+
+  &:hover:not(.disabled) {
+    border-color: t.get('primary-color');
+  }
+
+  &:focus-visible {
+    @include t.focus-ring;
+    border-color: t.get('primary-color');
+  }
+
+  &.disabled {
+    cursor: default;
+    opacity: t.get('disabled-opacity');
+  }
+}
+
+.label {
+  flex: 1 1 auto;
+  min-height: 1.5em;
+  width: 1%;
+  padding: t.get('input-padding');
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+
+  &.placeholder {
+    color: t.get('text-muted-color');
+  }
+}
+
+.clear {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  align-self: center;
+  padding: 0 0.25rem;
+  color: t.get('text-muted-color');
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+
+  &:hover {
+    color: t.get('text-color');
+  }
+}
+
+.dropdown {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  color: t.get('text-muted-color');
+}
+
+.panel {
+  position: fixed;
+  z-index: 1000;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  background: t.get('surface-background');
+  color: t.get('text-color');
+  border: 1px solid t.get('surface-border');
+  border-radius: t.get('border-radius');
+  box-shadow: t.get('overlay-shadow');
+}
+
+.header {
+  padding: 0.5rem;
+}
+
+.filter {
+  box-sizing: border-box;
+  width: 100%;
+  padding: t.get('input-padding');
+  font: inherit;
+  color: inherit;
+  background: t.get('input-background');
+  border: 1px solid t.get('input-border-color');
+  border-radius: t.get('border-radius');
+
+  &:focus {
+    outline: none;
+    border-color: t.get('primary-color');
+  }
+}
+
+.scroller {
+  position: relative;
+  overflow: auto;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin: 0;
+  padding: 0.25rem;
+  list-style: none;
+}
+
+.option {
+  padding: 0.5rem 0.75rem;
+  white-space: nowrap;
+  cursor: pointer;
+  border-radius: calc(#{t.get('border-radius')} - 2px);
+
+  &.active {
+    background: t.get('surface-hover');
+    color: t.get('text-hover-color');
+  }
+
+  &.selected {
+    background: t.get('highlight-background');
+    color: t.get('highlight-color');
+  }
+}
+
+.empty {
+  padding: 0.5rem 0.75rem;
+  color: t.get('text-muted-color');
+}

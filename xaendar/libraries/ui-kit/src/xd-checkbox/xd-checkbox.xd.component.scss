@@ -1,0 +1,63 @@
+@use '../theme/tokens' as t;
+
+:host {
+  display: inline-flex;
+  width: 1.25rem;
+  height: 1.25rem;
+  vertical-align: bottom;
+  border-radius: 4px;
+  cursor: pointer;
+  user-select: none;
+  outline: none;
+}
+
+:host(.disabled) {
+  cursor: default;
+  opacity: t.get('disabled-opacity');
+}
+
+.box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  border: 1px solid t.get('input-border-color');
+  border-radius: 4px;
+  background: t.get('input-background');
+  color: t.get('text-color');
+  transition:
+    background t.get('transition-duration'),
+    color t.get('transition-duration'),
+    border-color t.get('transition-duration'),
+    outline-color t.get('transition-duration');
+  outline-color: transparent;
+}
+
+.icon {
+  width: 0.875rem;
+  height: 0.875rem;
+  font-size: 0.875rem;
+}
+
+:host(:not(.disabled):hover) .box {
+  border-color: t.get('primary-color');
+}
+
+:host(.checked) .box,
+:host(.indeterminate) .box {
+  border-color: t.get('primary-color');
+  background: t.get('primary-color');
+  color: t.get('primary-contrast-color');
+}
+
+:host(.checked:not(.disabled):hover) .box,
+:host(.indeterminate:not(.disabled):hover) .box {
+  border-color: t.get('primary-hover-color');
+  background: t.get('primary-hover-color');
+}
+
+:host(:focus-visible) .box {
+  @include t.focus-ring;
+}

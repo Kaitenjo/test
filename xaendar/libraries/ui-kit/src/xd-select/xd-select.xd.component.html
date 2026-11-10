@@ -1,0 +1,74 @@
+@import { XdIconComponent } from '../xd-icon/xd-icon.xd.component.ts'
+
+<div
+  #trigger
+  @if (accessibleLabel()) {
+    aria-label="{accessibleLabel()}"
+  }
+  @if (activeId()) {
+    aria-activedescendant="{activeId()}"
+  }
+  role="combobox"
+  aria-haspopup="listbox"
+  aria-expanded="{String(isOpen())}"
+  aria-controls="{listId}"
+  aria-disabled="{String(disabled())}"
+  tabindex="{triggerTabIndex()}"
+  class="trigger"
+  [class.open]="{isOpen()}"
+  [class.disabled]="{disabled()}"
+  (click)="toggle()"
+  (keydown)="onKeyDown($event)"
+>
+  <span class="label" [class.placeholder]="{!hasValue()}">{ displayLabel() }</span>
+  @if (showClear() && hasValue() && !disabled()) {
+    <button type="button" class="clear" tabindex="-1" aria-label="Clear" (click)="clear($event)">
+      <xd-icon name="times" />
+    </button>
+  }
+  <span class="dropdown">
+    <xd-icon name="chevron-down" />
+  </span>
+</div>
+@if (isOpen()) {
+  <div #panel class="panel" style="{panelStyle()}">
+    @if (filter()) {
+      <div class="header">
+        <input
+          #filterField
+          type="text"
+          class="filter"
+          role="searchbox"
+          autocomplete="off"
+          aria-label="Filter"
+          aria-controls="{listId}"
+          value="{filterText()}"
+          (input)="onFilterInput($event.target as HTMLInputElement)"
+          (keydown)="onKeyDown($event, true)"
+        />
+      </div>
+    }
+    <div class="scroller" style="{`max-height: ${listHeight()}`}">
+      @if (visibleItems().length > 0) {
+        <ul id="{listId}" class="list" role="listbox">
+          @for (item of visibleItems()) {
+            <li
+              id="{`${listId}-${$index()}`}"
+              role="option"
+              aria-selected="{String(item().selected)}"
+              class="option"
+              [class.selected]="{item().selected}"
+              [class.active]="{$index() === activeIndex()}"
+              (click)="selectItem(item())"
+              (mousemove)="setActive($index())"
+            >
+              { item().label }
+            </li>
+          }
+        </ul>
+      } @else {
+        <div class="empty" role="status">{ emptyMessage() }</div>
+      }
+    </div>
+  </div>
+}

@@ -1,0 +1,9 @@
+@import { XdIconComponent } from '../xd-icon/xd-icon.xd.component.ts'
+
+<div class="box">
+  @if (indeterminate()) {
+    <xd-icon name="minus" class="icon" />
+  } @else if (checked()) {
+    <xd-icon name="check" class="icon" />
+  }
+</div>

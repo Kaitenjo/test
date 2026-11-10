@@ -1,0 +1,423 @@
+@use '../theme/tokens' as t;
+
+$padding-cell: 0.75rem 1rem;
+$transition: t.get('transition-duration');
+
+:host {
+  position: relative;
+  display: block;
+  font-family: t.get('font-family');
+  font-size: t.get('font-size');
+  color: t.get('text-color');
+}
+
+.xd-grid {
+  position: relative;
+  display: block;
+}
+
+.xd-grid-hidden {
+  display: none;
+}
+
+.xd-grid-flex-scrollable {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+
+  > .xd-grid-table-container {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    min-height: 0;
+    height: 100%;
+  }
+}
+
+.xd-grid-table-container {
+  position: relative;
+}
+
+.xd-grid-scrollable > .xd-grid-table-container {
+  overflow: auto;
+}
+
+.xd-grid-table {
+  width: 100%;
+  border-spacing: 0;
+  border-collapse: separate;
+}
+
+.xd-grid-mask {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: t.get('mask-background');
+}
+
+.xd-grid-loading-icon {
+  width: 2rem;
+  height: 2rem;
+  font-size: 2rem;
+  color: t.get('primary-color');
+}
+
+.xd-grid-header,
+.xd-grid-footer {
+  padding: 1rem;
+  color: t.get('text-color');
+  background: t.get('surface-background');
+  border: 0 solid t.get('surface-border');
+}
+
+.xd-grid-header {
+  border-width: 1px 0;
+  font-weight: 600;
+}
+
+.xd-grid-footer {
+  border-width: 0 0 1px;
+}
+
+.xd-grid-paginator {
+  display: block;
+  border: 0 solid t.get('surface-border');
+}
+
+.xd-grid-paginator-top {
+  border-width: 0 0 1px;
+}
+
+.xd-grid-paginator-bottom {
+  border-width: 1px 0 0;
+}
+
+// Header cells
+
+.xd-grid-header-cell,
+.xd-grid-filter-cell {
+  padding: $padding-cell;
+  font-weight: 600;
+  color: t.get('text-muted-color');
+  text-align: start;
+  background: t.get('surface-header');
+  border: 0 solid t.get('surface-border');
+  border-block-end-width: 1px;
+  transition:
+    background $transition,
+    color $transition,
+    box-shadow $transition;
+}
+
+.xd-grid-scrollable .xd-grid-thead,
+.xd-grid-flex-scrollable .xd-grid-thead {
+  position: sticky;
+  inset-block-start: 0;
+  z-index: 1;
+}
+
+.xd-grid-filter-cell {
+  font-weight: normal;
+  padding-block-start: 0;
+}
+
+.xd-grid-column-header-content {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.xd-grid-column-title,
+.xd-grid-sort-icon,
+.xd-grid-sort-badge {
+  vertical-align: middle;
+}
+
+.xd-grid-sort-icon {
+  flex-shrink: 0;
+  font-size: 0.875rem;
+  color: t.get('text-muted-color');
+  transition: color $transition;
+}
+
+.xd-grid-sort-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.25rem;
+  height: 1.25rem;
+  font-size: 0.75rem;
+  color: t.get('primary-contrast-color');
+  background: t.get('primary-color');
+  border-radius: 50%;
+}
+
+.xd-grid-sortable-column {
+  cursor: pointer;
+  user-select: none;
+  outline-color: transparent;
+
+  &:not(.xd-grid-column-sorted):hover {
+    color: t.get('text-hover-color');
+    background: t.get('surface-hover');
+  }
+
+  &:focus-visible {
+    @include t.focus-ring;
+
+    outline-offset: -2px;
+  }
+}
+
+.xd-grid-column-sorted {
+  color: t.get('highlight-color');
+  background: t.get('highlight-background');
+
+  .xd-grid-sort-icon {
+    color: t.get('highlight-color');
+  }
+}
+
+.xd-grid-reorderable-column {
+  cursor: move;
+}
+
+.xd-drop-before {
+  box-shadow: inset 2px 0 0 0 t.get('primary-color');
+}
+
+.xd-drop-after {
+  box-shadow: inset -2px 0 0 0 t.get('primary-color');
+}
+
+// The alignment is chained to the cell classes: they set `text-align: start` and are declared later, so a lone
+// alignment class would lose against them
+
+.xd-grid-header-cell,
+.xd-grid-cell {
+  &.xd-grid-align-center {
+    text-align: center;
+
+    .xd-grid-column-header-content {
+      justify-content: center;
+    }
+  }
+
+  &.xd-grid-align-end {
+    text-align: end;
+
+    .xd-grid-column-header-content {
+      justify-content: flex-end;
+    }
+  }
+}
+
+// Column filters
+
+.xd-grid-filter-input {
+  box-sizing: border-box;
+  width: 100%;
+  padding: 0.4rem 0.6rem;
+  font: inherit;
+  color: t.get('text-color');
+  background: t.get('input-background');
+  border: 1px solid t.get('input-border-color');
+  border-radius: t.get('border-radius');
+  transition: border-color $transition;
+
+  &:hover {
+    border-color: t.get('primary-color');
+  }
+
+  &:focus {
+    outline: none;
+    border-color: t.get('primary-color');
+    box-shadow: 0 0 0 1px t.get('primary-color');
+  }
+}
+
+// Column resizing
+
+.xd-grid-resizable-column {
+  position: relative;
+  overflow: hidden;
+  white-space: nowrap;
+  background-clip: padding-box;
+}
+
+.xd-grid-column-resizer {
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline-end: 0;
+  display: block;
+  width: 0.5rem;
+  height: 100%;
+  cursor: col-resize;
+  touch-action: none;
+}
+
+.xd-grid-resize-indicator {
+  position: absolute;
+  inset-block-start: 0;
+  z-index: 10;
+  display: none;
+  width: 2px;
+  background: t.get('primary-color');
+}
+
+// Body
+
+.xd-grid-row {
+  color: t.get('text-color');
+  background: t.get('surface-background');
+  outline-color: transparent;
+  transition:
+    background $transition,
+    color $transition,
+    box-shadow $transition;
+
+  &:focus-visible {
+    @include t.focus-ring;
+
+    outline-offset: -2px;
+  }
+}
+
+.xd-grid-cell {
+  padding: $padding-cell;
+  text-align: start;
+  border: 0 solid t.get('surface-border');
+  border-block-end-width: 1px;
+}
+
+.xd-grid-resizable-column ~ .xd-grid-resizable-column,
+.xd-grid-resize-table .xd-grid-cell {
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.xd-grid-cell-checkbox,
+.xd-grid-cell-radio,
+.xd-grid-cell-expander {
+  width: 3rem;
+}
+
+.xd-grid-hoverable .xd-grid-selectable-row {
+  cursor: pointer;
+}
+
+.xd-grid-hoverable .xd-grid-row:not(.xd-grid-row-selected):hover {
+  color: t.get('text-hover-color');
+  background: t.get('surface-hover');
+}
+
+.xd-grid-row-selected,
+.xd-grid-striped .xd-grid-row-odd.xd-grid-row-selected {
+  color: t.get('highlight-color');
+  background: t.get('highlight-background');
+}
+
+.xd-grid-striped .xd-grid-row-odd {
+  background: t.get('surface-ground');
+}
+
+.xd-grid-row-placeholder .xd-grid-cell {
+  color: transparent;
+}
+
+.xd-grid-empty-cell {
+  padding: $padding-cell;
+  color: t.get('text-muted-color');
+  text-align: center;
+}
+
+.xd-grid-expansion-cell {
+  padding: 0;
+  border-block-end: 1px solid t.get('surface-border');
+}
+
+.xd-grid-row-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  padding: 0;
+  color: t.get('text-muted-color');
+  cursor: pointer;
+  background: transparent;
+  border: 0;
+  border-radius: 50%;
+  transition:
+    background $transition,
+    color $transition;
+
+  &:hover {
+    color: t.get('text-hover-color');
+    background: t.get('surface-hover');
+  }
+
+  &:focus-visible {
+    @include t.focus-ring;
+  }
+}
+
+.xd-grid-tfoot > tr > td {
+  font-weight: 600;
+  background: t.get('surface-header');
+  border-block-end: 1px solid t.get('surface-border');
+}
+
+// Variants
+
+.xd-grid-gridlines {
+  .xd-grid-header,
+  .xd-grid-footer,
+  .xd-grid-paginator {
+    border-inline-width: 1px;
+  }
+
+  .xd-grid-header-cell,
+  .xd-grid-filter-cell,
+  .xd-grid-cell {
+    border-inline-width: 1px 0;
+    border-block-start-width: 1px;
+  }
+
+  .xd-grid-header-cell:last-child,
+  .xd-grid-filter-cell:last-child,
+  .xd-grid-cell:last-child {
+    border-inline-end-width: 1px;
+  }
+}
+
+.xd-grid-small {
+  .xd-grid-header,
+  .xd-grid-footer {
+    padding: 0.5rem 0.75rem;
+  }
+
+  .xd-grid-header-cell,
+  .xd-grid-filter-cell,
+  .xd-grid-cell,
+  .xd-grid-empty-cell {
+    padding: 0.375rem 0.5rem;
+  }
+}
+
+.xd-grid-large {
+  .xd-grid-header,
+  .xd-grid-footer {
+    padding: 1.25rem;
+  }
+
+  .xd-grid-header-cell,
+  .xd-grid-filter-cell,
+  .xd-grid-cell,
+  .xd-grid-empty-cell {
+    padding: 1.25rem;
+  }
+}

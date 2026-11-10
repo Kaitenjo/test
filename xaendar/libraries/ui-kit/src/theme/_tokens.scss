@@ -1,0 +1,47 @@
+// Design tokens shared by every component of the ui-kit.
+//
+// A token is a CSS custom property (`--xd-<name>`) with a default: the page overrides it on any ancestor
+// (`:root { --xd-primary-color: #0ea5e9; }`) and custom properties cross the shadow roots.
+// Components never redeclare the properties on `:host`: they read them with `t.get('name')`.
+@use 'sass:map';
+@use 'sass:string';
+
+$defaults: (
+  'font-family': inherit,
+  'font-size': 1rem,
+  'primary-color': #6366f1,
+  'primary-hover-color': #4f46e5,
+  'primary-contrast-color': #ffffff,
+  'text-color': #334155,
+  'text-hover-color': #1e293b,
+  'text-muted-color': #64748b,
+  'surface-ground': #f8fafc,
+  'surface-background': #ffffff,
+  'surface-hover': #f1f5f9,
+  'surface-border': #e2e8f0,
+  'surface-header': #f8fafc,
+  'highlight-background': #eef2ff,
+  'highlight-color': #4338ca,
+  'focus-ring-color': #6366f1,
+  'focus-ring-width': 2px,
+  'danger-color': #ef4444,
+  'border-radius': 6px,
+  'disabled-opacity': 0.6,
+  'overlay-shadow': string.unquote('0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1)'),
+  'mask-background': rgba(255, 255, 255, 0.5),
+  'transition-duration': 0.2s,
+  'input-background': #ffffff,
+  'input-border-color': #cbd5e1,
+  'input-padding': 0.5rem 0.75rem
+);
+
+/// The value of a token: `var(--xd-name, default)`.
+@function get($name) {
+  @return var(--xd-#{$name}, map.get($defaults, $name));
+}
+
+/// The focus ring shared by the interactive elements.
+@mixin focus-ring {
+  outline: get('focus-ring-width') solid get('focus-ring-color');
+  outline-offset: 2px;
+}

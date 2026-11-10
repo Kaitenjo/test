@@ -1,0 +1,1 @@
+import './components-root/components-root.xd.component';

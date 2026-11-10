@@ -1,0 +1,29 @@
+:host {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  width: 1em;
+  height: 1em;
+  vertical-align: middle;
+}
+
+svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+svg.spin {
+  animation: xd-icon-spin 2s linear infinite;
+}
+
+@keyframes xd-icon-spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(359deg);
+  }
+}

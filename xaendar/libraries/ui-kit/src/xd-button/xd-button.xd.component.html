@@ -1,0 +1,25 @@
+@import { XdIconComponent } from '../xd-icon/xd-icon.xd.component.ts'
+
+<button
+  @if (disabled()) {
+    disabled
+  }
+  @if (accessibleLabel()) {
+    aria-label="{accessibleLabel()}"
+  }
+  type="{type()}"
+  class="button"
+  [class.text]="{text()}"
+  [class.rounded]="{rounded()}"
+  [class.secondary]="{severity() === 'secondary'}"
+  [class.danger]="{severity() === 'danger'}"
+  [class.icon-only]="{iconOnly}"
+>
+  @if (icon()) {
+    <xd-icon name="{icon()}" class="icon" [class.right]="{iconPos() === 'right'}" />
+  }
+  @if (label()) {
+    <span class="label">{ label() }</span>
+  }
+  <slot />
+</button>

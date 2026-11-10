@@ -1,0 +1,19 @@
+@use '../theme/tokens' as t;
+
+:host {
+  display: block;
+  position: relative;
+  overflow: auto;
+  outline: 0 none;
+  color: t.get('text-color');
+  font-family: t.get('font-family');
+}
+
+:host(:focus-visible) {
+  @include t.focus-ring;
+}
+
+.content {
+  min-width: 100%;
+  box-sizing: border-box;
+}
