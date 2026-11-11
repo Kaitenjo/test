@@ -36,7 +36,7 @@ export class ComponentsRootComponent extends CustomElement {
 
   private _createRows(): Person[] {
     const rows: Person[] = [];
-    for (let i = 0; i < 40; i++) {
+    for (let i = 0; i < 1000; i++) {
       const firstName = this._firstNames[i % this._firstNames.length];
       const lastName = this._lastNames[(i * 3) % this._lastNames.length];
       rows.push({

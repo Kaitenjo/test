@@ -79,39 +79,39 @@
 <template gridTable(tableRows: XdGridRow[])>
   <table class="{`xd-grid-table ${tableStyleClass()}`}" part="table" role="grid" style="{tableStyle()}">
     <colgroup>
-      @for (column of displayColumns(); track column().key) {
-        <col style="{columnStyle(column())}" />
+      @for (column of displayColumns(); track column.key) {
+        <col style="{columnStyle(column)}" />
       }
     </colgroup>
     <thead class="xd-grid-thead">
       <tr>
-        @for (column of displayColumns(); track column().key; columnIndex = $index) {
+        @for (column of displayColumns(); track column.key; columnIndex = $index) {
           <th
-            @if (isSortable(column())) {
-              @@xdGridSortableColumn(field="{column().field}" (columnSort)="onSort($event)")
+            @if (isSortable(column)) {
+              @@xdGridSortableColumn(field="{column.field}" (columnSort)="onSort($event)")
             }
-            @if (isReorderable(column())) {
-              @@xdGridColumnReorder(index="{columnIndex()}" (columnDrop)="onColumnDrop($event)")
+            @if (isReorderable(column)) {
+              @@xdGridColumnReorder(index="{columnIndex}" (columnDrop)="onColumnDrop($event)")
             }
-            @if (isSortable(column())) {
-              aria-sort="{sortAriaValue(column())}"
+            @if (isSortable(column)) {
+              aria-sort="{sortAriaValue(column)}"
             }
             scope="col"
-            class="{headerClass(column())}"
+            class="{headerClass(column)}"
           >
             <div class="xd-grid-column-header-content">
-              @if (isDataColumn(column())) {
+              @if (isDataColumn(column)) {
                 <span class="xd-grid-column-title">
-                  <slot name="{`header-${column().field}`}">{ headerText(column()) }</slot>
+                  <span>{ headerText(column) }</span>
                 </span>
-                @if (isSortable(column())) {
-                  <xd-icon class="xd-grid-sort-icon" name="{sortIcon(column())}" />
-                  @if (sortBadge(column())) {
-                    <span class="xd-grid-sort-badge">{ sortBadge(column()) }</span>
+                @if (isSortable(column)) {
+                  <xd-icon class="xd-grid-sort-icon" name="{sortIcon(column)}" />
+                  @if (sortBadge(column)) {
+                    <span class="xd-grid-sort-badge">{ sortBadge(column) }</span>
                   }
                 }
               }
-              @if (column().type === 'checkbox' && isMultiple()) {
+              @if (column.type === 'checkbox' && isMultiple()) {
                 <xd-checkbox
                   ariaLabel="Select all rows"
                   checked="{headerChecked()}"
@@ -120,12 +120,12 @@
                 />
               }
             </div>
-            @if (isResizable(column())) {
+            @if (isResizable(column)) {
               <span
                 @@xdGridColumnResizer(
                   (resizeBegin)="onResizeBegin($event)"
                   (resizing)="onResizing($event)"
-                  (resizeEnd)="onResizeEnd($event, columnIndex())"
+                  (resizeEnd)="onResizeEnd($event, columnIndex)"
                 )
                 class="xd-grid-column-resizer"
               />
@@ -135,34 +135,34 @@
       </tr>
       @if (hasColumnFilters()) {
         <tr class="xd-grid-filter-row">
-          @for (column of displayColumns(); track column().key) {
+          @for (column of displayColumns(); track column.key) {
             <th class="xd-grid-filter-cell">
-              @if (column().filter) {
-                @switch (column().filterType) {
+              @if (column.filter) {
+                @switch (column.filterType) {
                   @case ('numeric') {
                     <xd-input-number
-                      ariaLabel="{filterPlaceholder(column())}"
-                      value="{filterValue(column()) as number | null}"
-                      (valueChange)="onFilterValue(column(), $event.detail)"
+                      ariaLabel="{filterPlaceholder(column)}"
+                      value="{filterValue(column) as number | null}"
+                      (valueChange)="onFilterValue(column, $event.detail)"
                     />
                   }
                   @case ('boolean') {
                     <xd-checkbox
-                      ariaLabel="{filterPlaceholder(column())}"
-                      checked="{filterValue(column()) === true}"
-                      indeterminate="{filterValue(column()) === null}"
-                      (checkedChange)="onFilterBoolean(column())"
+                      ariaLabel="{filterPlaceholder(column)}"
+                      checked="{filterValue(column) === true}"
+                      indeterminate="{filterValue(column) === null}"
+                      (checkedChange)="onFilterBoolean(column)"
                     />
                   }
                   @default {
                     <input
                       class="xd-grid-filter-input"
                       type="text"
-                      aria-label="{filterPlaceholder(column())}"
-                      data-field="{column().field}"
-                      placeholder="{filterPlaceholder(column())}"
-                      value="{filterText(column())}"
-                      (input)="onFilterInput(column(), $event.target as HTMLInputElement)"
+                      aria-label="{filterPlaceholder(column)}"
+                      data-field="{column.field}"
+                      placeholder="{filterPlaceholder(column)}"
+                      value="{filterText(column)}"
+                      (input)="onFilterInput(column, $event.target as HTMLInputElement)"
                     />
                   }
                 }
@@ -173,67 +173,67 @@
       }
     </thead>
     <tbody class="xd-grid-tbody">
-      @for (row of tableRows(); track row().key; rowIndex = $index) {
+      @for (row of tableRows; track row.key; rowIndex = $index) {
         <tr
           @if (isSelectable()) {
             @@xdGridSelectableRow(
-              index="{rowIndex() + rowOffset()}"
-              disabled="{!isRowSelectable(row())}"
-              (rowClick)="onRowClick(row(), $event)"
+              index="{rowIndex + rowOffset()}"
+              disabled="{!isRowSelectable(row)}"
+              (rowClick)="onRowClick(row, $event)"
             )
           }
           @if (isSelectable()) {
-            aria-selected="{isSelected(row().data)}"
+            aria-selected="{isSelected(row.data)}"
           }
-          class="{rowClass(row(), rowIndex())}"
+          class="{rowClass(row, rowIndex)}"
           style="{rowStyle()}"
         >
-          @for (column of displayColumns(); track column().key) {
-            <td class="{cellClass(column())}">
-              @switch (column().type) {
+          @for (column of displayColumns(); track column.key) {
+            <td class="{cellClass(column)}">
+              @switch (column.type) {
                 @case ('checkbox') {
                   <xd-checkbox
                     ariaLabel="Select row"
-                    checked="{isSelected(row().data)}"
-                    disabled="{!isRowSelectable(row())}"
-                    (checkedChange)="onRowCheckbox(row(), rowIndex(), $event)"
+                    checked="{isSelected(row.data)}"
+                    disabled="{!isRowSelectable(row)}"
+                    (checkedChange)="onRowCheckbox(row, rowIndex, $event)"
                   />
                 }
                 @case ('radio') {
                   <xd-radio-button
                     ariaLabel="Select row"
-                    checked="{isSelected(row().data)}"
-                    disabled="{!isRowSelectable(row())}"
-                    (checkedChange)="onRowRadio(row(), rowIndex(), $event)"
+                    checked="{isSelected(row.data)}"
+                    disabled="{!isRowSelectable(row)}"
+                    (checkedChange)="onRowRadio(row, rowIndex, $event)"
                   />
                 }
                 @case ('expander') {
                   <button
                     type="button"
                     class="xd-grid-row-toggle"
-                    aria-expanded="{isExpanded(row().data) ? 'true' : 'false'}"
+                    aria-expanded="{isExpanded(row.data) ? 'true' : 'false'}"
                     aria-label="Toggle row"
-                    (click)="toggleRow(row().data, $event)"
+                    (click)="toggleRow(row.data, $event)"
                   >
-                    <xd-icon name="{expanderIcon(row().data)}" />
+                    <xd-icon name="{expanderIcon(row.data)}" />
                   </button>
                 }
                 @default {
-                  <slot name="{cellSlot(row(), column())}">{ cellText(row(), column()) }</slot>
+                  <span>{ cellText(row, column) }</span>
                 }
               }
             </td>
           }
         </tr>
-        @if (isExpanded(row().data)) {
+        @if (isExpanded(row.data)) {
           <tr class="xd-grid-expansion-row">
             <td class="xd-grid-expansion-cell" colspan="{displayColumns().length}">
-              <slot name="{`expansion-${row().key}`}" />
+              <slot name="{`expansion-${row.key}`}" />
             </td>
           </tr>
         }
       }
-      @if (tableRows().length === 0) {
+      @if (tableRows.length === 0) {
         <tr class="xd-grid-empty-row">
           <td class="xd-grid-empty-cell" colspan="{displayColumns().length}">
             <slot name="empty">{ emptyMessage() }</slot>
@@ -244,9 +244,9 @@
     @if (hasFooter()) {
       <tfoot class="xd-grid-tfoot">
         <tr>
-          @for (column of displayColumns(); track column().key) {
-            <td class="{cellClass(column())}">
-              <slot name="{`footer-${column().field}`}">{ footerText(column()) }</slot>
+          @for (column of displayColumns(); track column.key) {
+            <td class="{cellClass(column)}">
+              <slot name="{`footer-${column.field}`}">{ footerText(column) }</slot>
             </td>
           }
         </tr>

@@ -20,18 +20,18 @@
 
 @if (showPageLinks()) {
   <span class="pages">
-    @for (pageLink of pageLinks(); track pageLink()) {
+    @for (pageLink of pageLinks(); track pageLink) {
       <button
-        @if (pageLink() - 1 === page()) {
+        @if (pageLink - 1 === page()) {
           aria-current="page"
         }
         type="button"
         class="page"
-        aria-label="{pageLabel(pageLink())}"
-        [class.selected]="{pageLink() - 1 === page()}"
-        (click)="changePage(pageLink() - 1)"
+        aria-label="{pageLabel(pageLink)}"
+        [class.selected]="{pageLink - 1 === page()}"
+        (click)="changePage(pageLink - 1)"
       >
-        { localize(pageLink()) }
+        { localize(pageLink) }
       </button>
     }
   </span>

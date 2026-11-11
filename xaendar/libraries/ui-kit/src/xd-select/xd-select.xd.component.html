@@ -53,16 +53,16 @@
         <ul id="{listId}" class="list" role="listbox">
           @for (item of visibleItems()) {
             <li
-              id="{`${listId}-${$index()}`}"
+              id="{`${listId}-${$index}`}"
               role="option"
-              aria-selected="{String(item().selected)}"
+              aria-selected="{String(item.selected)}"
               class="option"
-              [class.selected]="{item().selected}"
-              [class.active]="{$index() === activeIndex()}"
-              (click)="selectItem(item())"
-              (mousemove)="setActive($index())"
+              [class.selected]="{item.selected}"
+              [class.active]="{$index === activeIndex()}"
+              (click)="selectItem(item)"
+              (mousemove)="setActive($index)"
             >
-              { item().label }
+              { item.label }
             </li>
           }
         </ul>
