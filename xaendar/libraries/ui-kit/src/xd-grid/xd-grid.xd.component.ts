@@ -689,16 +689,16 @@ export class XdGridComponent extends CustomElement {
   /**
    * The style of the element holding the table.
    */
-  public containerStyle(): string {
+  public containerStyle(): string | null {
     const height = this.viewportHeight();
 
-    return this.scrollable() && !this.virtualScroll() && height && height !== 'flex' ? `max-height: ${height}` : '';
+    return this.scrollable() && !this.virtualScroll() && height && height !== 'flex' ? `max-height: ${height}` : null;
   }
 
   /**
    * The style of the table: its layout and, when the columns expand it, its width.
    */
-  public tableStyle(): string {
+  public tableStyle(): string | null {
     if (this.resizableColumns() && this.columnResizeMode() === 'expand') {
       const widths = this._widths();
       const columns = this.displayColumns();
@@ -706,7 +706,7 @@ export class XdGridComponent extends CustomElement {
       for (let i = 0; i < columns.length; i++) {
         const width = widths[(columns[i] as XdGridDisplayColumn).key];
         if (width === undefined) {
-          return '';
+          return null;
         }
         total += width;
       }
@@ -714,13 +714,13 @@ export class XdGridComponent extends CustomElement {
       return `table-layout: fixed; width: ${total}px`;
     }
 
-    return this.resizableColumns() ? 'table-layout: fixed' : '';
+    return this.resizableColumns() ? 'table-layout: fixed' : null;
   }
 
   /**
    * The width of a column in the `colgroup`.
    */
-  public columnStyle(column: XdGridDisplayColumn): string {
+  public columnStyle(column: XdGridDisplayColumn): string | null {
     const width = this._widths()[column.key];
     const styles: string[] = [];
     if (width !== undefined) {
@@ -732,7 +732,7 @@ export class XdGridComponent extends CustomElement {
       styles.push(`min-width: ${column.minWidth}`);
     }
 
-    return styles.join('; ');
+    return styles.length ? styles.join('; ') : null;
   }
 
   /**
@@ -804,8 +804,8 @@ export class XdGridComponent extends CustomElement {
   /**
    * The style of a row: a fixed height with virtual scrolling.
    */
-  public rowStyle(): string {
-    return this.virtualScroll() ? `height: ${this.virtualScrollItemSize()}px` : '';
+  public rowStyle(): string | null {
+    return this.virtualScroll() ? `height: ${this.virtualScrollItemSize()}px` : null;
   }
 
   /**

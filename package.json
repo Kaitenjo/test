@@ -21,8 +21,8 @@
     "@angular/forms": "^21.2.0",
     "@angular/platform-browser": "^21.2.0",
     "@angular/router": "^21.2.0",
-    "@xaendar/core": "^1.2.4",
-    "@xaendar/signals": "^1.2.4",
+    "@xaendar/core": "^1.2.6",
+    "@xaendar/signals": "^1.2.6",
     "@xaendar/ui-kit": "file:xaendar/dist/ui-kit",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0"

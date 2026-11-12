@@ -27,7 +27,7 @@ export class App {
     const cities = ['Roma', 'Milano', 'Torino', 'Napoli', 'Bologna', 'Firenze', 'Genova', 'Palermo'];
     const roles = ['Developer', 'Designer', 'Product Manager', 'QA Engineer', 'DevOps', 'Analyst'];
     const rows: Person[] = [];
-    for (let i = 0; i < 10000; i++) {
+    for (let i = 0; i < 1000; i++) {
       const firstName = firstNames[i % firstNames.length];
       const lastName = lastNames[(i * 3) % lastNames.length];
       rows.push({
