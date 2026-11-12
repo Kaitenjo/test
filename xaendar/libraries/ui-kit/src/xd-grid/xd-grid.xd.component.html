@@ -181,8 +181,6 @@
               disabled="{!isRowSelectable(row)}"
               (rowClick)="onRowClick(row, $event)"
             )
-          }
-          @if (isSelectable()) {
             aria-selected="{isSelected(row.data)}"
           }
           class="{rowClass(row, rowIndex)}"

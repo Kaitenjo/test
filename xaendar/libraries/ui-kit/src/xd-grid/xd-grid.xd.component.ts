@@ -5,27 +5,7 @@ import type { Aliased, Computed, InputSignal, QuerySignal, Signal } from '@xaend
 import type { PaginatorState } from '../xd-paginator/xd-paginator.xd.component';
 import type { XdScrollerComponent, XdScrollerRange } from '../xd-scroller/xd-scroller.xd.component';
 import { filterConstraints } from '../utils/xd-grid.filter';
-import type {
-  XdGridColReorderEvent,
-  XdGridColResizeEvent,
-  XdGridColumn,
-  XdGridColumnDropEvent,
-  XdGridColumnSortEvent,
-  XdGridDisplayColumn,
-  XdGridExportOptions,
-  XdGridFilterEvent,
-  XdGridFilterMatchMode,
-  XdGridFilters,
-  XdGridLazyLoadEvent,
-  XdGridPageEvent,
-  XdGridResizeEvent,
-  XdGridRow,
-  XdGridRowClickEvent,
-  XdGridRowEvent,
-  XdGridRowExpandEvent,
-  XdGridSelectAllEvent,
-  XdGridSortMeta
-} from '../types/xd-grid.types';
+import type { XdGridColReorderEvent, XdGridColResizeEvent, XdGridColumn, XdGridColumnDropEvent, XdGridColumnSortEvent, XdGridDisplayColumn, XdGridExportOptions, XdGridFilterEvent, XdGridFilterMatchMode, XdGridFilters, XdGridLazyLoadEvent, XdGridPageEvent, XdGridResizeEvent, XdGridRow, XdGridRowClickEvent, XdGridRowEvent, XdGridRowExpandEvent, XdGridSelectAllEvent, XdGridSortMeta } from '../types/xd-grid.types';
 import { compareValues, equals, isEmptyValue, resolveFieldData } from '../utils/xd-grid.utils';
 
 /**
